@@ -1,0 +1,92 @@
+package umg.compiladores;
+import java_cup.runtime.*;
+
+// Definición de terminales
+terminal ENTERO, FLOTANTE, SUMA, RESTA, MULTIPLICACION, DIVISION, AND, OR, NOT;
+terminal SI, SINO, ENTONCES, FIN_SI, PUNTO_Y_COMA, COMA;
+terminal IMPRIMIR, PARENTESIS_ABRE, PARENTESIS_CIERRA;
+terminal CADENA, MIENTRAS, FIN_MIENTRAS, HACER;
+terminal IGUALIGUAL, MENOR_IGUAL, MAYOR_IGUAL, IGUAL, MENOR_QUE, MAYOR_QUE;
+terminal FUNCION, RETORNA, FIN_FUNCION, PROCEDIMIENTO, FIN_PROCEDIMIENTO;
+terminal LEER, NOMBRE_VARIABLE, VALOR_FLOTANTE, VALOR_ENTERO;
+terminal COMENTARIO_LINEA, COMENTARIO_MULTILINEA;
+
+// Definición de no terminales
+non terminal Programa;
+non terminal  Declaraciones,TipoDato,tipoDato,Sentencias, SentenciaImprimir, SentenciaLeer, SentenciaSi, SentenciaMientras, SentenciaProcedimiento, SentenciaFuncion,Llamado_funcion;
+non terminal Asignacion, OperacionesAritmeticas, Instancia, Simbolos ,Termino, Factor, Expresiones,OperacionAritmeticaa;
+non terminal funcionalidad,funcion,parametros, procedimiento, llamado_procedimiento;
+
+// Producción inicial
+start with Programa;
+
+Programa ::= Declaraciones;
+
+Declaraciones ::= SentenciaMientras
+                |SentenciaSi
+                |Asignacion
+                |Instancia
+                | SentenciaImprimir;
+
+SentenciaImprimir ::=IMPRIMIR PARENTESIS_ABRE OperacionesAritmeticas PARENTESIS_CIERRA PUNTO_Y_COMA;
+
+OperacionesAritmeticas ::= OperacionAritmeticaa
+                           |OperacionAritmeticaa OperacionesAritmeticas
+                           ;
+OperacionAritmeticaa ::=  Expresiones
+                        |Simbolos Expresiones
+                        ;
+
+Expresiones ::= VALOR_ENTERO
+                |VALOR_FLOTANTE
+                |CADENA
+                |NOMBRE_VARIABLE
+                |PARENTESIS_ABRE OperacionesAritmeticas PARENTESIS_CIERRA
+                ;
+
+Simbolos ::= SUMA
+             |RESTA
+             |MULTIPLICACION
+             |DIVISION
+             |MENOR_QUE
+             |MAYOR_QUE
+             |MENOR_IGUAL
+             |MAYOR_IGUAL
+;
+
+Instancia ::= TipoDato NOMBRE_VARIABLE PUNTO_Y_COMA;
+
+Asignacion ::= NOMBRE_VARIABLE IGUAL Expresiones PUNTO_Y_COMA
+            ;
+
+TipoDato ::= ENTERO
+           | FLOTANTE;
+//bucles
+SentenciaSi ::= SI PARENTESIS_ABRE Expresiones PARENTESIS_CIERRA ENTONCES funcionalidad FIN_SI
+              | SI PARENTESIS_ABRE Expresiones PARENTESIS_CIERRA ENTONCES funcionalidad SINO funcionalidad FIN_SI PUNTO_Y_COMA;
+
+
+funcionalidad ::=OperacionesAritmeticas
+                 |Asignacion
+                 |SentenciaImprimir
+                 ;
+
+SentenciaMientras ::=MIENTRAS PARENTESIS_ABRE Expresiones PARENTESIS_CIERRA HACER funcionalidad FIN_MIENTRAS PUNTO_Y_COMA;
+
+funcion ::= FUNCION NOMBRE_VARIABLE PARENTESIS_ABRE parametros PARENTESIS_CIERRA RETORNA TipoDato  Expresiones FIN_FUNCION PUNTO_Y_COMA;
+
+Llamado_funcion ::= NOMBRE_VARIABLE IGUAL NOMBRE_VARIABLE PARENTESIS_ABRE parametros PARENTESIS_CIERRA PUNTO_Y_COMA ;
+
+parametros ::= tipoDato
+               |COMA TipoDato
+               ;
+
+procedimiento ::= PROCEDIMIENTO NOMBRE_VARIABLE PARENTESIS_ABRE parametros PARENTESIS_CIERRA funcionalidad FIN_PROCEDIMIENTO  PUNTO_Y_COMA;
+
+llamado_procedimiento ::= NOMBRE_VARIABLE PARENTESIS_ABRE parametros PARENTESIS_CIERRA PUNTO_Y_COMA;
+
+SentenciaLeer ::= LEER PARENTESIS_ABRE NOMBRE_VARIABLE PARENTESIS_CIERRA PUNTO_Y_COMA;
+
+
+
+
